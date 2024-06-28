@@ -57,4 +57,10 @@ export class Unit {
     resetAngle() {
         this.sprite.angle = 0;
     }
+
+    onUpdate(deltaTime){
+        this.applyForce();
+        this.physics.applyGravity(deltaTime);
+        this.physics.applyFriction(deltaTime);
+    }
 }

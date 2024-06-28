@@ -34,8 +34,7 @@ export const usePhysics = (bodyForce) => {
         }
 
     }
-
-
+    
     return {
         addForce,
         addForceX,

@@ -29,24 +29,21 @@ export class MiBunny extends Unit {
     }
 
     onUpdate(time) {
+        super.onUpdate(time.deltaTime);
         this.groundPosition = this.app.screen.height - this.sprite.height / 2;
         this.isInGround = this.sprite.y >= this.groundPosition;
 
         if (this.isInGround) {
             this.canJump = true;
-            this.physics.applyFriction(time.deltaTime);
             if (this.inputAxis.X != 0) this.resetAngle();
         } else {
             this.canJump = false;
             this.fallAnimation(this.fallRotationVelocity * time.deltaTime, this.inputAxis.X);
         }
-
-        this.physics.applyGravity(time.deltaTime);
         this.moveX(this.inputAxis.X * this.walkVelocity, time.deltaTime);
 
         if (this.canJump) this.jump(this.jumpVelocity * time.deltaTime);
 
-        this.applyForce();
         this.keepInWindow();
     }
 
