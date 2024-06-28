@@ -9,12 +9,14 @@ export class MiBunny {
     sprite;
     groundPosition = 1000
     isInGround = false;
+    inputEvent = null
+
+    velocity = 10;
 
     constructor(texture, app) {
         this.app = app;
         this.texture = texture;
         this.sprite = new Sprite(texture);
-        app.stage.addChild(this.sprite);
 
         // Initial position
         this.sprite.anchor.set(0.5);
@@ -24,22 +26,38 @@ export class MiBunny {
         );
         this.sprite.y = 0;
 
-        const onUpdate = (time) => {
-            this.groundPosition = app.screen.height - this.sprite.height / 2;
-            this.isInGround = this.sprite.y >= this.groundPosition;
-
-            if (this.isInGround) {
-                this.sprite.y = this.groundPosition;
-                // this.sprite.angle = 180;
-            } else {
-                // Fall
-                this.sprite.angle += 6 * time.deltaTime;
-                this.sprite.y += 1.5 * time.deltaTime;
-            }
-        };
-        app.ticker.add(onUpdate);
+        app.stage.addChild(this.sprite);
+        app.ticker.add((time) => this.onUpdate(time));
         this.startInput();
     }
+
+    onUpdate(time) {
+        this.groundPosition = this.app.screen.height - this.sprite.height / 2;
+        this.isInGround = this.sprite.y >= this.groundPosition;
+
+        if (this.isInGround) {
+            this.sprite.y = this.groundPosition;
+            switch (this.inputEvent) {
+                case "a": return this.moveX(-this.velocity, time);
+                case "d": return this.moveX(this.velocity, time);
+            }
+            // this.sprite.angle = 180;
+        } else this.fall(time);
+    }
+
+    moveX(velocity, time) {
+        console.log(velocity)
+        this.sprite.x += velocity * time.deltaTime;
+    }
+    moveY(velocity, time) {
+        this.sprite.y += velocity * time.deltaTime;
+    }
+
+    fall(time) {
+        this.sprite.angle += 6 * time.deltaTime;
+        this.sprite.y += 101.5 * time.deltaTime;
+    }
+
 
     startInput() {
         const resetAngle = () => {
@@ -49,15 +67,14 @@ export class MiBunny {
         }
 
         // Input Event
-        addEventListener("keydown", (event) => {
-            if (event.key === "a") {
-                this.sprite.x -= 10;
-                resetAngle();
-            } // Move left
-            if (event.key === "d") {
-                this.sprite.x += 10;
-                resetAngle();
-            } // Move right
+        addEventListener("keypress", (event) => {
+            this.inputEvent = event.key;
+            resetAngle();
+        });
+
+        addEventListener("keyup", (event) => {
+            if (event.key != this.inputEvent) return;
+            this.inputEvent = null;
         });
     }
 }

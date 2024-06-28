@@ -20,5 +20,6 @@ const { Application, Assets } = PIXI;
   new Array(numberOfBunnies).fill(null).forEach((element) => {
     element = new MiBunny(texture, app);
   });
+
 })();
 
