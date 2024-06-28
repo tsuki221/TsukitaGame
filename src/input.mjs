@@ -33,13 +33,19 @@ export const useInput = () => {
             switch (event.key) {
                 case "a":
                 case "ArrowLeft":
+                    if (inputAxis.X == 1) break;
+                    inputAxis.X = 0; break;
                 case "d":
                 case "ArrowRight":
+                    if (inputAxis.X == -1) break;
                     inputAxis.X = 0; break;
                 case " ":
                 case "ArrowUp":
+                    if (inputAxis.Y == -1) break;
+                    inputAxis.Y = 0; break;
                 case "s":
                 case "ArrowDown":
+                    if (inputAxis.Y == 1) break;
                     inputAxis.Y = 0; break;
             }
 
