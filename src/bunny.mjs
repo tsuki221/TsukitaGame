@@ -11,7 +11,10 @@ export class MiBunny {
     isInGround = false;
     inputEvent = null
 
+    gravity = 3.5;
+
     velocity = 10;
+    jumpVelocity = 50;
 
     constructor(texture, app) {
         this.app = app;
@@ -36,10 +39,23 @@ export class MiBunny {
         this.isInGround = this.sprite.y >= this.groundPosition;
 
         if (this.isInGround) {
-            this.sprite.y = this.groundPosition;
             switch (this.inputEvent) {
-                case "a": return this.moveX(-this.velocity, time);
-                case "d": return this.moveX(this.velocity, time);
+                case "a":
+                case "ArrowLeft":    
+                    return this.moveX(-this.velocity, time);
+                case "d":
+                case "ArrowRight": 
+                     return this.moveX(this.velocity, time);
+
+                case " ":
+                case "ArrowUp":
+                    return this.moveY(-this.jumpVelocity, time);
+
+                case "s":
+                case "ArrowDown":
+                    return this.moveY(this.jumpVelocity, time);
+                default:
+                    this.sprite.y = this.groundPosition;
             }
             // this.sprite.angle = 180;
         } else this.fall(time);
@@ -55,7 +71,7 @@ export class MiBunny {
 
     fall(time) {
         this.sprite.angle += 6 * time.deltaTime;
-        this.sprite.y += 101.5 * time.deltaTime;
+        this.sprite.y += this.gravity * time.deltaTime;
     }
 
 
@@ -67,8 +83,9 @@ export class MiBunny {
         }
 
         // Input Event
-        addEventListener("keypress", (event) => {
+        addEventListener("keydown", (event) => {
             this.inputEvent = event.key;
+            console.log(this.inputEvent);
             resetAngle();
         });
 
