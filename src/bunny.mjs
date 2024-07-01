@@ -9,7 +9,7 @@ export class MiBunny extends Unit {
     canJump = false;
 
     walkVelocity = 8;
-    jumpVelocity = 300;
+    jumpVelocity = 150;
     fallRotationVelocity = 6;
 
     constructor(texture, app) {
@@ -22,6 +22,9 @@ export class MiBunny extends Unit {
         );
         this.sprite.y = 0;
 
+        this.sprite.width = 35;
+        this.sprite.height = 35;
+
         this.inputEvents.onKeyDown = (key) => this.onKeyDown(key);
 
         app.stage.addChild(this.sprite);
@@ -30,7 +33,7 @@ export class MiBunny extends Unit {
 
     onUpdate(time) {
         super.onUpdate(time.deltaTime);
-        this.groundPosition = this.app.screen.height - this.sprite.height / 2;
+        this.groundPosition = this.app.screen.height - this.sprite.height / 2 -14.5;
         this.isInGround = this.sprite.y >= this.groundPosition;
 
         if (this.isInGround) {
